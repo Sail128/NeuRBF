@@ -58,6 +58,9 @@ config.point_nn_kernel = 4
 config.ks_alpha = 1
 config.n_hidden_fl = 32
 
+config.sine_before_mlp = False
+config.sine_after_rbf = False
+
 config.num_levels_ref = 16
 config.level_dim_ref = 2
 config.base_resolution_ref = 16

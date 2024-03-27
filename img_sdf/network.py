@@ -197,7 +197,7 @@ class rbf(nn.Module):
                 sparse_embd_grad=True, act='relu', lc_act=None, 
                 rbf_suffixes=None, kc_init_config=None, 
                 rbf_lc0_normalize=True, pe_freqs=[], pe_lc0_freq=None, pe_hg0_freq=None,
-                pe_lc0_rbf_freq=None, pe_lc0_rbf_keep=None, 
+                pe_lc0_rbf_freq=None, pe_lc0_rbf_keep=None, sine_before_mlp=True, sine_after_rbf=True, 
                 **kwargs):
         super().__init__()
         if not isinstance(cmin, list):
@@ -231,6 +231,8 @@ class rbf(nn.Module):
         self.pe_lc0_freq = pe_lc0_freq
         self.pe_hg0_freq = pe_hg0_freq
         self.kc_mult = 1  # kc_mult=2 means extra copy of initial kc
+        self.sin_before_mlp = sine_before_mlp
+        self.sin_after_rbf = sine_after_rbf
 
         lc0_dim = n_hidden_fl
         hg0_dim = num_levels*level_dim
@@ -542,12 +544,18 @@ class rbf(nn.Module):
 
             out = self.lc0(kernel_idx)  # [p k_topk d_lc0]
             rbf_out = rbf_out[..., None]  # [p k_topk 1]
-            if len(self.pe_lc0_rbf_freq) >= 2 and self.pe_lc0_rbf_keep < out.shape[-1]:
+            if len(self.pe_lc0_rbf_freq) >= 2 and self.pe_lc0_rbf_keep < out.shape[-1] and self.sin_after_rbf:
                 if self.pe_lc0_rbf_keep > 0:
                     rbf_out = torch.cat([rbf_out.expand(-1, -1, self.pe_lc0_rbf_keep), 
                         torch.sin(rbf_out * self.pe_lc0_rbf_freqs[None, None])], -1)  # [p k_topk d_lc0]
                 else:
                     rbf_out = torch.sin(rbf_out * self.pe_lc0_rbf_freqs[None, None])  # [p k_topk d_lc0]
+            else:
+                if self.pe_lc0_rbf_keep > 0:
+                    rbf_out = torch.cat([rbf_out.expand(-1, -1, self.pe_lc0_rbf_keep), 
+                        rbf_out * self.pe_lc0_rbf_freqs[None, None]], -1)  # [p k_topk d_lc0]
+                else:
+                    rbf_out = rbf_out * self.pe_lc0_rbf_freqs[None, None]  # [p k_topk d_lc0]
             out = (out * rbf_out).sum(1)  # [p d_lc0]
 
         if self.num_levels > 0:
@@ -576,7 +584,7 @@ class rbf(nn.Module):
         for l in range(self.num_layers):
             h = self.backbone[l](h)
             
-            if l == 0 and self.pe_lc0_freqs is not None:
+            if l == 0 and self.pe_lc0_freqs is not None and self.sin_before_mlp:
                 h = h + torch.sin(h * self.pe_lc0_freqs[None])
             elif l != self.num_layers - 1:
                 if self.act == 0:

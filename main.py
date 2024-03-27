@@ -157,6 +157,8 @@ def main(opt):
     else:
         t = time.time()
         net = eval(f'network.{opt.arch}')
+        print(f"using sine_before_mlp: {opt.sine_before_mlp}")
+        print(f"using sine_after_rbf: {opt.sine_after_rbf}")
         model = net(opt.cmin, opt.cmax, s_dims, in_dim=in_dim, out_dim=out_dim,
             num_layers=opt.num_layers, hidden_dim=opt.hidden_dim, n_hidden_fl=opt.n_hidden_fl, 
             num_levels_ref=opt.num_levels_ref, level_dim_ref=opt.level_dim_ref, 
@@ -169,7 +171,8 @@ def main(opt):
             sparse_embd_grad=False, act=opt.act, lc_act=opt.lc_act, rbf_suffixes=opt.rbf_suffixes, 
             kc_init_config=opt.kc_init_config, rbf_lc0_normalize=opt.rbf_lc0_normalize, 
             pe_freqs=opt.pe_freqs, pe_lc0_freq=opt.pe_lc0_freq, pe_hg0_freq=opt.pe_hg0_freq,
-            pe_lc0_rbf_freq=opt.pe_lc0_rbf_freq, pe_lc0_rbf_keep=opt.pe_lc0_rbf_keep)
+            pe_lc0_rbf_freq=opt.pe_lc0_rbf_freq, pe_lc0_rbf_keep=opt.pe_lc0_rbf_keep, 
+            sine_before_mlp=opt.sine_before_mlp, sine_after_rbf=opt.sine_after_rbf)
         t_init_model = time.time() - t
         t = time.time()
         util_network.init_rbf_params(model, train_dataset, opt.kc_init_config, opt.kw_init_config, device=0)
