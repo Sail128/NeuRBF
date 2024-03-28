@@ -2,18 +2,27 @@
 
 This blog post documents the reproduction and ablation study from group 42* as part of the CS4240 Deep Learning 2023–24 course.
 
-| Authors    | Student number |
-| -------- | ------- |
-| Levijn de Jager  | 4903668    |
-| Placeholder  |   Placeholder  |
-|  Placeholder  | Placeholder   |
-|  Placeholder  |  Placeholder |
+| Authors            | Student number |
+| ------------------ | -------------- |
+| Levijn de Jager    | 4903668        |
+| Roan van der Voort | 4646452        |
+| Jimmie Kwok        | Placeholder    |
+| Kunal Kaushik      | Placeholder    |
 
 ## Introduction
 
 ## Dataset
 
-## RBF function
+subset of LIU-4k-V2
+
+## RBF Functions
+
+In the paper only one RBF (Radial Basis Function) is tested. It is however acknowledged that this method extends to any generic RBF and that certain types of images can benefit from different RBFs. In order to investigate this We chose several different RBFs to try out on a random subset of images from our dataset.
+
+<!-- rbf_types = ["ivq_a", "nlin_f", "ivmq_a", "gauss_a", "mqd_a", "expsin_a"] -->
+
+
+![Radial Basis Functions error maps](blogpost_assets/rbf_error_maps.png)
 
 ## Sinusoidal composition
 The paper extends the radial basis function by adding a sinusoidal composition on the the radial basis with different frequencies. The formulation is as follows:
@@ -29,9 +38,9 @@ The sinusoidal composition method is also applied to the output of the first ful
 They claim that using these sinusoidal compositions improve the performance. They also documented the results they got with and without these additional compositions and we want to check these results by doing the same ablation study and compare our results but with a different dataset. 
 
 Our results can be seen in the table below:
-| Method                        | Our Average PSNR | Their Average PSNR |
-| ----------------------------- | ---------------- | ------------------ |
-| With Sinusoidal composition   |   0   | 0 |
-| Only on feature vector        |   0   | 0 |
-|  Only on RBF function         |   0   | 0 |
-|  No Sinusoidal composition    |   0   | 0 |
+| Method                      | Our Average PSNR | Their Average PSNR |
+| --------------------------- | ---------------- | ------------------ |
+| With Sinusoidal composition | 0                | 0                  |
+| Only on feature vector      | 0                | 0                  |
+| Only on RBF function        | 0                | 0                  |
+| No Sinusoidal composition   | 0                | 0                  |
