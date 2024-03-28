@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 import os
-os.environ["OMP_NUM_THREADS"] = "256"
+os.environ["OMP_NUM_THREADS"] = "64"
 
 import sys
 import importlib
