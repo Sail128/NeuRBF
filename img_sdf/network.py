@@ -553,9 +553,9 @@ class rbf(nn.Module):
             else:
                 if self.pe_lc0_rbf_keep > 0:
                     rbf_out = torch.cat([rbf_out.expand(-1, -1, self.pe_lc0_rbf_keep), 
-                        rbf_out * self.pe_lc0_rbf_freqs[None, None]], -1)  # [p k_topk d_lc0]
+                        rbf_out], -1)  # [p k_topk d_lc0]
                 else:
-                    rbf_out = rbf_out * self.pe_lc0_rbf_freqs[None, None]  # [p k_topk d_lc0]
+                    rbf_out = rbf_out  # [p k_topk d_lc0]
             out = (out * rbf_out).sum(1)  # [p d_lc0]
 
         if self.num_levels > 0:
