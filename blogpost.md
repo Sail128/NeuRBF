@@ -6,7 +6,7 @@ This blog post documents the reproduction and ablation study from group 42* as p
 | ------------------ | -------------- | ---------------------- |
 | Levijn de Jager    | 4903668        | Sinusoidal composition |
 | Roan van der Voort | 4646452        | RBF functions          |
-| Jimmie Kwok        | Placeholder    |                        |
+| Jimmie Kwok        | 5410908    |    2D Image Fitting, Results Processing                    |
 | Kunal Kaushik      | Placeholder    |                        |
 
 ## Introduction
@@ -14,6 +14,21 @@ This blog post documents the reproduction and ablation study from group 42* as p
 ## Dataset
 
 subset of LIU-4k-V2
+
+## 2D Image Fitting
+We evaluated the effectiveness of NeuRBF on 2D image fitting by reproducing the error map of the two fitted images shown in Figure 4 of [ref paper]. The error map is defined as the error between the original image and the reconstructed image by NeuRBF, which is calculated as the mean absolute error across the color channels for each pixel (range of pixel value is [0, 1]). The left column of the figure below shows the paper’s results of the image fitting and the right column displays the results of our implementation. Below each error map the following is reported: the number of training parameters (in M/Millions) used by NeuRBF and the Peak Signal-to-Noise Ratio (PSNR) of the reproduced figure (in dB). The formula for the PSNR is given by Equation (1):
+
+$
+\begin{equation}
+    PSNR = 10\log_{10}(\frac{R^2}{MSE})
+\end{equation}
+$
+
+The R term in the formula is the maximum signal value in our input image data, which is 255 in our case. The MSE is the mean-square error between the reconstructed and the original image. 
+
+![2d_image_fitting](blogpost_assets/2d_image_fitting.png)
+
+In general, for the image fitting it is desired to achieve a lower number of training parameters and a higher PSNR as a higher PSNR indicates a better quality of the reconstructed image. The first figure (first row) is titled ‘The Trekvliet Shipping Canal near Rijswijk’, known as the ‘View near the Geest Bridge’ and obtained from [ref]. However, in the paper the authors did not mention the title of the figure or the reference. The second figure was provided by the authors via their Github page and is a picture of the dwarf planet Pluto. For the first image of the canal, the number of training parameters of our reproduction is almost the same as what the authors obtained. However, the PSNR of our reproduced canal image is much lower than expected. This could be due to various reasons. As mentioned earlier we could not find the exact source of their used canal image, but we did find the same image with the same size. Furthermore, in the error map we can see a lot of those 'weird' error lines which may be caused by JPEG artifacts as our original image had been compressed and saved in the .jpg format. For the Pluto image, the reported number of training parameters and PSNR of our reproduction are very similar to the authors’ results.
 
 ## RBF Functions
 
@@ -48,3 +63,5 @@ Our results can be seen in the table below. On the left are our results on our o
 Firstly, the PSNR values between our ablation study and theirs is very different. They report a lot higher values in general. Moreover, our results show that the MSC on the RBF has a bigger influence on the results then MSC on the feature vector whilest they report about the same amount of influence of the MSC on the RBF and the feature vector on the results.
 
 We are not exaclty sure why these differ so much, but we have some speculations that might explain these differences. The difference in general results might be because of the difference in the dataset but that would mean that it is not a very generilizable method. Furthermore, the paper states that using different RBF kernels can give better results in specific image cases. So this might also explain the possible difference between the MSC on the RBF function and the MSC on the feature vector, as it is possible that the MSC on the RBF has more influence on our dataset then theirs. We further explore the different kernels later in this blog post.
+
+## References
