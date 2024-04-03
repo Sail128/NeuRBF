@@ -1,13 +1,13 @@
 # Reproduction and ablation study of "NeuRBF: ANeural Fields Representation with Adaptive Radial Basis Functions"
 
-This blog post documents the reproduction and ablation study from group 42* as part of the CS4240 Deep Learning 2023–24 course.
+This blog post documents the reproduction and ablation study from group 42* as part of the CS4240 Deep Learning 2023-24 course.
 
-| Authors            | Student number |
-| ------------------ | -------------- |
-| Levijn de Jager    | 4903668        |
-| Roan van der Voort | 4646452        |
-| Jimmie Kwok        | Placeholder    |
-| Kunal Kaushik      | Placeholder    |
+| Authors            | Student number | Responsible for        |
+| ------------------ | -------------- | ---------------------- |
+| Levijn de Jager    | 4903668        | Sinusoidal composition |
+| Roan van der Voort | 4646452        | RBF functions          |
+| Jimmie Kwok        | Placeholder    |                        |
+| Kunal Kaushik      | Placeholder    |                        |
 
 ## Introduction
 
