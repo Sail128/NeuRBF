@@ -40,9 +40,11 @@ They claim that using these sinusoidal compositions improve the performance. The
 Our results can be seen in the table below. On the left are our results on our own dataset of 50 high resolution images. On the right are the results from the ablation study from the paper itself. They used a dataset of 100 images.
 | Method                        | Our Average PSNR | Their Average PSNR |
 | ----------------------------- | ---------------- | ------------------ |
-| With Sinusoidal composition   |   41.45   | 51.53 |
-| Only on feature vector        |   39.76   | 48.19 |
-|  Only on RBF function         |   42.38   | 48.46 |
-|  No Sinusoidal composition    |   39.96   | 43.81 |
+| With MSC                      |   41.45          | 51.53              |
+| MSC only on feature vector    |   39.76          | 48.19              |
+| MSC only on RBF function      |   42.38          | 48.46              |
+| No MSC                        |   39.96          | 43.81              |
 
 Firstly, the PSNR values between our ablation study and theirs is very different. They report a lot higher values in general. Moreover, our results show that the MSC on the RBF has a bigger influence on the results then MSC on the feature vector whilest they report about the same amount of influence of the MSC on the RBF and the feature vector on the results.
+
+We are not exaclty sure why these differ so much, but we have some speculations that might explain these differences. The difference in general results might be because of the difference in the dataset but that would mean that it is not a very generilizable method. Furthermore, the paper states that using different RBF kernels can give better results in specific image cases. So this might also explain the possible difference between the MSC on the RBF function and the MSC on the feature vector, as it is possible that the MSC on the RBF has more influence on our dataset then theirs. We further explore the different kernels later in this blog post.
