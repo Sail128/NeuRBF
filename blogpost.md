@@ -32,15 +32,6 @@ The R term in the formula is the maximum signal value in our input image data, w
 
 In general, for the image fitting it is desired to achieve a lower number of training parameters and a higher PSNR as a higher PSNR indicates a better quality of the reconstructed image. The first figure (first row) is titled ‘The Trekvliet Shipping Canal near Rijswijk’, known as the ‘View near the Geest Bridge’ and obtained from [ref]. However, in the paper the authors did not mention the title of the figure or the reference. The second figure was provided by the authors via their Github page and is a picture of the dwarf planet Pluto. For the first image of the canal, the number of training parameters of our reproduction is almost the same as what the authors obtained. However, the PSNR of our reproduced canal image is much lower than expected. This could be due to various reasons. As mentioned earlier we could not find the exact source of their used canal image, but we did find the same image with the same size. Furthermore, in the error map we can see a lot of those 'weird' error lines which may be caused by JPEG artifacts as our original image had been compressed and saved in the .jpg format. For the Pluto image, the reported number of training parameters and PSNR of our reproduction are very similar to the authors’ results.
 
-## RBF Functions
-
-In the paper only one RBF (Radial Basis Function) is tested. It is however acknowledged that this method extends to any generic RBF and that certain types of images can benefit from different RBFs. In order to investigate this We chose several different RBFs to try out on a random subset of images from our dataset.
-
-<!-- rbf_types = ["ivq_a", "nlin_f", "ivmq_a", "gauss_a", "mqd_a", "expsin_a"] -->
-
-
-![Radial Basis Functions error maps](blogpost_assets/rbf_error_maps.png)
-
 ## Sinusoidal composition
 The paper extends the radial basis function by adding a multi-frequency sinusoidal composition (MSC) on the the radial basis with different frequencies. The formulation is as follows:
 
@@ -65,5 +56,52 @@ Our results can be seen in the table below. On the left are our results on our o
 Firstly, the PSNR values between our ablation study and theirs is very different. They report a lot higher values in general. Moreover, our results show that the MSC on the RBF has a bigger influence on the results then MSC on the feature vector whilest they report about the same amount of influence of the MSC on the RBF and the feature vector on the results.
 
 We are not exaclty sure why these differ so much, but we have some speculations that might explain these differences. The difference in general results might be because of the difference in the dataset but that would mean that it is not a very generilizable method. Furthermore, the paper states that using different RBF kernels can give better results in specific image cases. So this might also explain the possible difference between the MSC on the RBF function and the MSC on the feature vector, as it is possible that the MSC on the RBF has more influence on our dataset then theirs. We further explore the different kernels later in this blog post.
+
+## Effect of the RBF Function on image representation performance
+
+The paper we are examining here is about the use of radial basis functions in for learning feature representation of image and higher higher dimensional data such as SDFs and radiance fields. They recognise that the gridbased weighted linear interpolation method of Local Neural Fields can be viewed as a special case os a radial basis function. From this then follow the main contribution of this paper which is to present a framework to which uses adaptive RBFs to find a representation, called Neural Radial Basis Fields. Adaptive RBFs are not locked to a grid as they have additional position and shape parameters.
+
+The paper however only uses one RBF throughout the paper as an example of this method, the inverse multi quadratic function.
+$$\varphi(\mathbf{x},\mathbf{c}_{i},\Sigma_{i})={\frac{1}{1+(\mathbf{x}-\mathbf{c}_{i})^{T}\Sigma_{i}^{-1}(\mathbf{x}-\mathbf{c}_{i})}}$$
+Besides the inverse multiquadratic many more Radial Basis Functions exist and may have varying performance depending on the exact case. This is also acknowledged within the paper but not expanded upon.
+
+This led to two questions. First does the choice of RBF significantly matter. Second, did there example choice of RBF significantly influence there results.
+
+<!-- We were therefor interested in expanding upon this to see if this claim has merit or if there choice of RBF could have significantly influenced there results. -->
+
+
+<!-- In the paper only one RBF (Radial Basis Function) is tested. It is however acknowledged that this method extends to any generic RBF and that certain types of images can benefit from different RBFs. In order to investigate this We chose several different RBFs to try out on a random subset of images from our dataset. -->
+
+
+### setup of experiment
+
+To investigate the questions. We decided to test five different RBFs besides the RBF used in the paper on six images we selected to be very different, based on amount of detail, background, subject, lighting conditions. We recognize this is only a small sample size, but this was chosen to stay within time and compute constraints.
+
+#### RBFs
+
+In total six RBFs were tested, these and the reasoning being:
+
+- Inverse quadratic: This is the example function they use. The basic formula for this functionis: $\frac{1}{1+(x-kc)^2*ks}$
+- Gaussian: A very well understood RBF from literature and often implemented. the basic formula for this functionis: 
+- Inverse multiquadratic: This and the non inverse variant too are also often used in literature. 
+- multiquadratic:
+- Non linear: This function is a linear fall-off about a center point up to a distance away from it which is dependent on the weight. When used in a regular grid without the adaptive parameters this function is the same as a Local Neural Field. Making it interesting to see how this performs against more smooth RBFs
+- Exponential Sine: this function is a periodic function which may capture a periodic signal better and could therefore perform better in certain cases.
+
+In all cases the adpative variants with anisotropic shape parameters were used. This was done to remain consistent with the results presented in the paper.
+
+The 3d plots of each RBF function with a identity matrix as shape parameter.
+![3d plotted rbfs](blogpost_assets/3d_plotted_rbfs.png)
+
+- which RBFs
+- Method of testing
+- selection of images
+
+### results & discussion
+
+![Radial Basis Functions error maps](blogpost_assets/rbf_error_maps.png)
+
+notes on the results:
+- 
 
 ## References
