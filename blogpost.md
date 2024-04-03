@@ -93,9 +93,13 @@ In all cases the adpative variants with anisotropic shape parameters were used. 
 The 3d plots of each RBF function with a identity matrix as shape parameter.
 ![3d plotted rbfs](blogpost_assets/3d_plotted_rbfs.png)
 
-- which RBFs
-- Method of testing
-- selection of images
+#### Images
+
+For this analysis the following images were selected from the dataset referred to earlier.
+
+![image selected form the dataset](blogpost_assets/rbf_plotted_images.png)
+
+#### Method of testing
 
 ### results & discussion
 
