@@ -1,4 +1,4 @@
-# Reproduction and ablation study of "NeuRBF: ANeural Fields Representation with Adaptive Radial Basis Functions"
+# Reproduction and ablation study of "NeuRBF: A Neural Fields Representation with Adaptive Radial Basis Functions"
 
 This blog post documents the results of the reproduction and ablation study of Group 42 as part of the CS4240 Deep Learning 2023-24 course.
 
@@ -11,14 +11,14 @@ This blog post documents the results of the reproduction and ablation study of G
 
 ## Introduction
 
-Neural fields make use of Neural Networks to form neural representations, which map continuous input values to outputs for the purpose of various tasks such as representing 2D images and 3D reconstruction. Neural fields evolved from using global neural features into local neural fields, which utilise grid-like structures to organise local neural features and interpolate linearly to sum up the local features. However, there still remain issues in achieving desired accuracy and compactness with grid-like structures, due to their unadaptive nature to target signals and inability to completely utilise non-uniformity and sparsity for many tasks. The purpose of the authors in this work is to enhance the representation abilities of neural fields. They do so by introducing spatial adaptivity and frequency extension in the interpolation of basis functions. Grid-based linear interpolation is in a sense a type of Radial Basis Function (RBF). RBFs can reduce the number of parameters required for representations, and hence the authors proposed NeuRBF, which combines adaptive and grid-based RBFs. The RBFs are extended channel-wise and utilise multi-frequency sinusoidal composition, increasing representation capabilities by allowing the RBFs to encode a bigger range of frequencies without the cost of needing more parameters. A weighted scheme for K-Means is used for kernel parameter initialisation to help RBFs adapt to different target signals, and for Neural Radiance Field (NeRF) reconstruction, a distillation based approach is also made use of. The authors claim to have achieved state of the art accuracy on 2D image fitting, 3D signed distance field reconstruction, and NeRF reconstruction. For the purposes of our reproducibility studies, we focus only on 2D image fitting. We will reproduce the rightmost column of image 4 from the original paper, and vary the value of various parameters in the implementation of NeuRBF to study the effect on the results, and also compare to some ablation results for image fitting that the authors have provided in the original paper as well.
+Neural fields make use of Neural Networks to form neural representations, which map continuous input values to outputs for the purpose of various tasks such as representing 2D images and 3D reconstruction. Neural fields evolved from using global neural features into local neural fields, which utilise grid-like structures to organise local neural features and interpolate linearly to sum up the local features. However, there still remain issues in achieving desired accuracy and compactness with grid-like structures, due to their unadaptive nature to target signals and inability to completely utilise non-uniformity and sparsity for many tasks. The purpose of the authors in this work [[1]](#1) is to enhance the representation abilities of neural fields. They do so by introducing spatial adaptivity and frequency extension in the interpolation of basis functions. Grid-based linear interpolation is in a sense a type of Radial Basis Function (RBF). RBFs can reduce the number of parameters required for representations, and hence the authors proposed NeuRBF, which combines adaptive and grid-based RBFs. The RBFs are extended channel-wise and utilise multi-frequency sinusoidal composition, increasing representation capabilities by allowing the RBFs to encode a bigger range of frequencies without the cost of needing more parameters. A weighted scheme for K-Means is used for kernel parameter initialisation to help RBFs adapt to different target signals, and for Neural Radiance Field (NeRF) reconstruction, a distillation based approach is also made use of. The authors claim to have achieved state of the art accuracy on 2D image fitting, 3D signed distance field reconstruction, and NeRF reconstruction. For the purposes of our reproducibility studies, we focus only on 2D image fitting. We will reproduce the rightmost column of image 4 from the original paper, and vary the value of various parameters in the implementation of NeuRBF to study the effect on the results, and also compare to some ablation results for image fitting that the authors have provided in the original paper as well.
 
 ## Dataset
 
-subset of LIU-4k-V2
+subset of LIU-4k-V2 [[2]](#2)
 
 ## 2D Image Fitting
-We evaluated the effectiveness of NeuRBF on 2D image fitting by reproducing the error map of the two fitted images shown in Figure 4 of [ref paper]. The error map is defined as the error between the original image and the reconstructed image by NeuRBF, which is calculated as the mean absolute error across the color channels for each pixel (range of pixel value is [0, 1]). The left column of the figure below shows the paper’s results of the image fitting and the right column displays the results of our implementation. Below each error map the following is reported: the number of training parameters (in M/Millions) used by NeuRBF and the Peak Signal-to-Noise Ratio (PSNR) of the reproduced figure (in dB). The formula for the PSNR is given by the equation below:
+We evaluated the effectiveness of NeuRBF on 2D image fitting by reproducing the error map of the two fitted images shown in Figure 4 of [[1]](#1). The error map is defined as the error between the original image and the reconstructed image by NeuRBF, which is calculated as the mean absolute error across the color channels for each pixel (range of pixel value is [0, 1]). The left column of the figure below shows the paper’s results of the image fitting and the right column displays the results of our implementation. Below each error map the following is reported: the number of training parameters (in M/Millions) used by NeuRBF and the Peak Signal-to-Noise Ratio (PSNR) of the reproduced figure (in dB). The formula for the PSNR [[3]](#3) is given by the equation below:
 
 $$
     PSNR = 10\log_{10}(\frac{R^2}{MSE})
@@ -28,7 +28,7 @@ The R term in the formula is the maximum signal value in our input image data, w
 
 ![2d_image_fitting](blogpost_assets/2d_image_fitting.png)
 
-In general, for the image fitting it is desired to achieve a lower number of training parameters and a higher PSNR as a higher PSNR indicates a better quality of the reconstructed image. The first figure (first row) is titled ‘The Trekvliet Shipping Canal near Rijswijk’, known as the ‘View near the Geest Bridge’ and obtained from [ref]. However, the authors of the paper failed to include the title of the figure or the corresponding reference. The second figure was provided by the authors via their Github page and is a picture of the dwarf planet Pluto. For the first image of the canal, the number of training parameters of our reproduction is almost the same as what the authors obtained. However, the PSNR of our reproduced canal image is much lower than expected. This could be due to various reasons. As mentioned earlier we could not find the exact source of their used canal image, but we did find an identical image with the same size. Furthermore, in the error map we can see a lot of those 'weird' error lines which may be caused by JPEG artifacts as our original image had been compressed and saved in the .jpg format. For the Pluto image, the reported number of training parameters and PSNR of our reproduction are very similar to the authors’ results.
+In general, for the image fitting it is desired to achieve a lower number of training parameters and a higher PSNR as a higher PSNR indicates a better quality of the reconstructed image. The first figure (first row) is titled ‘The Trekvliet Shipping Canal near Rijswijk’, known as the ‘View near the Geest Bridge’ and obtained from [[4]](#4). However, the authors of the paper failed to include the title of the figure or the corresponding reference. The second figure was provided by the authors via their Github page [[5]](#5) and is a picture of the dwarf planet Pluto. For the first image of the canal, the number of training parameters of our reproduction is almost the same as what the authors obtained. However, the PSNR of our reproduced canal image is much lower than expected. This could be due to various reasons. As mentioned earlier we could not find the exact source of their used canal image, but we did find an identical image with the same size. Furthermore, in the error map we can see a lot of those 'weird' error lines which may be caused by JPEG artifacts as our original image had been compressed and saved in the .jpg format. For the Pluto image, the reported number of training parameters and PSNR of our reproduction are very similar to the authors’ results.
 
 ## Normalization 
 The RBF function plays a significant role in NeuRBF as will be highlighted later in this blog post. The paper states that the radial base value (calculated by the RBF function) at each point can be optionally normalized via the following equation:
@@ -125,3 +125,18 @@ notes on the results:
 - 
 
 ## References
+
+<a id="1">[1]</a> 
+Chen, Z., Li, Z., Song, L., Chen, L., Yu, J., Yuan, J., & Xu, Y. (2023). Neurbf: A neural fields representation with adaptive radial basis functions. In Proceedings of the IEEE/CVF International Conference on Computer Vision (pp. 4182-4194).
+
+<a id="2">[2]</a> 
+Liu, J., Liu, D., Yang, W., Xia, S., Zhang, X., & Dai, Y. (2019). A Comprehensive Benchmark for Single Image Compression Artifacts Reduction. In arXiv.
+
+<a id="3">[3]</a>
+Hore, A., & Ziou, D. (2010, August). Image quality metrics: PSNR vs. SSIM. In 2010 20th international conference on pattern recognition (pp. 2366-2369). IEEE.
+
+<a id="4">[4]</a>
+Weissenbruch, J. H. (1868). The Trekvliet Shipping Canal near Rijswijk, known as the ‘View near the Geest Bridge’ [Painting]. Rijksmuseum. http://hdl.handle.net/10934/RM0001.COLLECT.6531
+
+<a id="5">[5]</a>
+NeuRBF. GitHub. https://github.com/oppo-us-research/NeuRBF
