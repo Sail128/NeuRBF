@@ -37,7 +37,6 @@ The sinusoidal composition method is also applied to the output of the first ful
 
 They claim that using these sinusoidal compositions improve the performance. They also documented the results they got with and without these additional compositions and we want to check these results by doing the same ablation study and compare our results but with a different dataset. 
 
-<<<<<<< HEAD
 Our results can be seen in the table below. On the left are our results on our own dataset of 50 high resolution images. On the right are the results from the ablation study from the paper itself. They used a dataset of 100 images.
 | Method                        | Our Average PSNR | Their Average PSNR |
 | ----------------------------- | ---------------- | ------------------ |
@@ -47,12 +46,3 @@ Our results can be seen in the table below. On the left are our results on our o
 |  No Sinusoidal composition    |   39.96   | 43.81 |
 
 Firstly, the PSNR values between our ablation study and theirs is very different. They report a lot higher values in general. Moreover, our results show that the MSC on the RBF has a bigger influence on the results then MSC on the feature vector whilest they report about the same amount of influence of the MSC on the RBF and the feature vector on the results.
-=======
-Our results can be seen in the table below:
-| Method                      | Our Average PSNR | Their Average PSNR |
-| --------------------------- | ---------------- | ------------------ |
-| With Sinusoidal composition | 0                | 0                  |
-| Only on feature vector      | 0                | 0                  |
-| Only on RBF function        | 0                | 0                  |
-| No Sinusoidal composition   | 0                | 0                  |
->>>>>>> 35545daa8f95607b8935eccd377d60cd9926562b
