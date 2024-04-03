@@ -1,6 +1,6 @@
 # Reproduction and ablation study of "NeuRBF: ANeural Fields Representation with Adaptive Radial Basis Functions"
 
-This blog post documents the reproduction and ablation study from group 42* as part of the CS4240 Deep Learning 2023-24 course.
+This blog post documents the results of the reproduction and ablation study of Group 42 as part of the CS4240 Deep Learning 2023-24 course.
 
 | Authors            | Student number | Responsible for        |
 | ------------------ | -------------- | ---------------------- |
@@ -18,19 +18,35 @@ Neural fields make use of Neural Networks to form neural representations, which 
 subset of LIU-4k-V2
 
 ## 2D Image Fitting
-We evaluated the effectiveness of NeuRBF on 2D image fitting by reproducing the error map of the two fitted images shown in Figure 4 of [ref paper]. The error map is defined as the error between the original image and the reconstructed image by NeuRBF, which is calculated as the mean absolute error across the color channels for each pixel (range of pixel value is [0, 1]). The left column of the figure below shows the paper’s results of the image fitting and the right column displays the results of our implementation. Below each error map the following is reported: the number of training parameters (in M/Millions) used by NeuRBF and the Peak Signal-to-Noise Ratio (PSNR) of the reproduced figure (in dB). The formula for the PSNR is given by Equation (1):
+We evaluated the effectiveness of NeuRBF on 2D image fitting by reproducing the error map of the two fitted images shown in Figure 4 of [ref paper]. The error map is defined as the error between the original image and the reconstructed image by NeuRBF, which is calculated as the mean absolute error across the color channels for each pixel (range of pixel value is [0, 1]). The left column of the figure below shows the paper’s results of the image fitting and the right column displays the results of our implementation. Below each error map the following is reported: the number of training parameters (in M/Millions) used by NeuRBF and the Peak Signal-to-Noise Ratio (PSNR) of the reproduced figure (in dB). The formula for the PSNR is given by the equation below:
 
-$
-\begin{equation}
+$$
     PSNR = 10\log_{10}(\frac{R^2}{MSE})
-\end{equation}
-$
+$$
 
-The R term in the formula is the maximum signal value in our input image data, which is 255 in our case. The MSE is the mean-square error between the reconstructed and the original image. 
+The R term in the formula is the maximum signal value in our input image data, which is 255 in our case. The MSE is the mean squared error between the reconstructed and the original image. 
 
 ![2d_image_fitting](blogpost_assets/2d_image_fitting.png)
 
-In general, for the image fitting it is desired to achieve a lower number of training parameters and a higher PSNR as a higher PSNR indicates a better quality of the reconstructed image. The first figure (first row) is titled ‘The Trekvliet Shipping Canal near Rijswijk’, known as the ‘View near the Geest Bridge’ and obtained from [ref]. However, in the paper the authors did not mention the title of the figure or the reference. The second figure was provided by the authors via their Github page and is a picture of the dwarf planet Pluto. For the first image of the canal, the number of training parameters of our reproduction is almost the same as what the authors obtained. However, the PSNR of our reproduced canal image is much lower than expected. This could be due to various reasons. As mentioned earlier we could not find the exact source of their used canal image, but we did find the same image with the same size. Furthermore, in the error map we can see a lot of those 'weird' error lines which may be caused by JPEG artifacts as our original image had been compressed and saved in the .jpg format. For the Pluto image, the reported number of training parameters and PSNR of our reproduction are very similar to the authors’ results.
+In general, for the image fitting it is desired to achieve a lower number of training parameters and a higher PSNR as a higher PSNR indicates a better quality of the reconstructed image. The first figure (first row) is titled ‘The Trekvliet Shipping Canal near Rijswijk’, known as the ‘View near the Geest Bridge’ and obtained from [ref]. However, the authors of the paper failed to include the title of the figure or the corresponding reference. The second figure was provided by the authors via their Github page and is a picture of the dwarf planet Pluto. For the first image of the canal, the number of training parameters of our reproduction is almost the same as what the authors obtained. However, the PSNR of our reproduced canal image is much lower than expected. This could be due to various reasons. As mentioned earlier we could not find the exact source of their used canal image, but we did find an identical image with the same size. Furthermore, in the error map we can see a lot of those 'weird' error lines which may be caused by JPEG artifacts as our original image had been compressed and saved in the .jpg format. For the Pluto image, the reported number of training parameters and PSNR of our reproduction are very similar to the authors’ results.
+
+## Normalization 
+The RBF function plays a significant role in NeuRBF as will be highlighted later in this blog post. The paper states that the radial base value (calculated by the RBF function) at each point can be optionally normalized via the following equation:
+
+$$
+\tilde{\varphi}(x, c_i, \Sigma_i) = \frac{\varphi(x, c_i, \Sigma_i)}{\sum_{k \in U(x)}\varphi(x, c_i, \Sigma_i)}
+$$
+
+where $\varphi(x, c_i, \Sigma_i)$ corresponds to the used RBF function and $U(x)$ refers to the set of neighboring RBFs of the point x.
+
+We wanted to investigate the effect of this normalization, because the authors mentioned that they deemed it as an optional step without providing any further explanation. The effect is investigated by conducting an ablation study on normalization, where the results of this ablation is shown by the table below:
+
+| Method                        | Average PSNR | 
+| ----------------------------- | ---------------- | 
+| With Normalization                      |   41.45          | 
+| No Normalization    |   41.31         | 
+
+Based on the ablation study above, we can conclude that removing the normalization has little to no effect on the average PSNR achieved by NeuRBF.
 
 ## Sinusoidal composition
 The paper extends the radial basis function by adding a multi-frequency sinusoidal composition (MSC) on the the radial basis with different frequencies. The formulation is as follows:
