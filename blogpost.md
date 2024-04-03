@@ -1,19 +1,28 @@
 # Reproduction and ablation study of "NeuRBF: ANeural Fields Representation with Adaptive Radial Basis Functions"
 
-This blog post documents the reproduction and ablation study from group 42* as part of the CS4240 Deep Learning 2023–24 course.
+This blog post documents the reproduction and ablation study from group 42* as part of the CS4240 Deep Learning 2023-24 course.
 
-| Authors    | Student number |
-| -------- | ------- |
-| Levijn de Jager  | 4903668    |
-| Placeholder  |   Placeholder  |
-|  Placeholder  | Placeholder   |
-|  Placeholder  |  Placeholder |
+| Authors            | Student number | Responsible for        |
+| ------------------ | -------------- | ---------------------- |
+| Levijn de Jager    | 4903668        | Sinusoidal composition |
+| Roan van der Voort | 4646452        | RBF functions          |
+| Jimmie Kwok        | Placeholder    |                        |
+| Kunal Kaushik      | Placeholder    |                        |
 
 ## Introduction
 
 ## Dataset
 
-## RBF function
+subset of LIU-4k-V2
+
+## RBF Functions
+
+In the paper only one RBF (Radial Basis Function) is tested. It is however acknowledged that this method extends to any generic RBF and that certain types of images can benefit from different RBFs. In order to investigate this We chose several different RBFs to try out on a random subset of images from our dataset.
+
+<!-- rbf_types = ["ivq_a", "nlin_f", "ivmq_a", "gauss_a", "mqd_a", "expsin_a"] -->
+
+
+![Radial Basis Functions error maps](blogpost_assets/rbf_error_maps.png)
 
 ## Sinusoidal composition
 The paper extends the radial basis function by adding a multi-frequency sinusoidal composition (MSC) on the the radial basis with different frequencies. The formulation is as follows:
@@ -28,6 +37,7 @@ The sinusoidal composition method is also applied to the output of the first ful
 
 They claim that using these sinusoidal compositions improve the performance. They also documented the results they got with and without these additional compositions and we want to check these results by doing the same ablation study and compare our results but with a different dataset. 
 
+<<<<<<< HEAD
 Our results can be seen in the table below. On the left are our results on our own dataset of 50 high resolution images. On the right are the results from the ablation study from the paper itself. They used a dataset of 100 images.
 | Method                        | Our Average PSNR | Their Average PSNR |
 | ----------------------------- | ---------------- | ------------------ |
@@ -37,3 +47,12 @@ Our results can be seen in the table below. On the left are our results on our o
 |  No Sinusoidal composition    |   39.96   | 43.81 |
 
 Firstly, the PSNR values between our ablation study and theirs is very different. They report a lot higher values in general. Moreover, our results show that the MSC on the RBF has a bigger influence on the results then MSC on the feature vector whilest they report about the same amount of influence of the MSC on the RBF and the feature vector on the results.
+=======
+Our results can be seen in the table below:
+| Method                      | Our Average PSNR | Their Average PSNR |
+| --------------------------- | ---------------- | ------------------ |
+| With Sinusoidal composition | 0                | 0                  |
+| Only on feature vector      | 0                | 0                  |
+| Only on RBF function        | 0                | 0                  |
+| No Sinusoidal composition   | 0                | 0                  |
+>>>>>>> 35545daa8f95607b8935eccd377d60cd9926562b
