@@ -42,7 +42,7 @@ In the paper only one RBF (Radial Basis Function) is tested. It is however ackno
 ## Sinusoidal composition
 The paper extends the radial basis function by adding a multi-frequency sinusoidal composition (MSC) on the the radial basis with different frequencies. The formulation is as follows:
 
-![alt text](radial_basis_sinus_function.png)
+$\varphi (\mathbf{x},\mathbf{c}_i,\Sigma _i)=sin(\widetilde{\varphi} (\mathbf{x},\mathbf{c}_i,\Sigma _i)\cdot \mathbf{m}+\mathbf{b})$
 
 The different frequencies are determined by setting a maximum and minimum for m. The rest of the elements are obtained by log-linearly dividing the range between the maximum and minimum. Comparing this to the fourier basis or gabor basis seen in the figure it is now possible to have a basis with non-linear paterns.
 
