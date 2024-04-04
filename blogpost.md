@@ -13,6 +13,8 @@ This blog post documents the results of the reproduction and ablation study of G
 
 Neural fields make use of Neural Networks to form neural representations, which map continuous input values to outputs for the purpose of various tasks such as representing 2D images and 3D reconstruction. Neural fields evolved from using global neural features into local neural fields, which utilise grid-like structures to organise local neural features and interpolate linearly to sum up the local features. However, there still remain issues in achieving desired accuracy and compactness with grid-like structures, due to their unadaptive nature to target signals and inability to completely utilise non-uniformity and sparsity for many tasks. The purpose of the authors in this work [[1]](#1) is to enhance the representation abilities of neural fields. They do so by introducing spatial adaptivity and frequency extension in the interpolation of basis functions. Grid-based linear interpolation is in a sense a type of Radial Basis Function (RBF). RBFs can reduce the number of parameters required for representations, and hence the authors proposed NeuRBF, which combines adaptive and grid-based RBFs. The RBFs are extended channel-wise and utilise multi-frequency sinusoidal composition, increasing representation capabilities by allowing the RBFs to encode a bigger range of frequencies without the cost of needing more parameters. A weighted scheme for K-Means is used for kernel parameter initialisation to help RBFs adapt to different target signals, and for Neural Radiance Field (NeRF) reconstruction, a distillation based approach is also made use of. The authors claim to have achieved state of the art accuracy on 2D image fitting, 3D signed distance field reconstruction, and NeRF reconstruction. For the purposes of our reproducibility studies, we focus only on 2D image fitting. We will reproduce the rightmost column of image 4 from the original paper, and vary the value of various parameters in the implementation of NeuRBF to study the effect on the results, and also compare to some ablation results for image fitting that the authors have provided in the original paper as well.
 
+![2d_image_fitting](blogpost_assets/neurbf.png)
+
 ## Dataset
 
 subset of LIU-4k-V2 [[2]](#2)
@@ -47,6 +49,25 @@ We wanted to investigate the effect of this normalization, because the authors m
 | No Normalization    |   41.31         | 
 
 Based on the ablation study above, we can conclude that removing the normalization has little to no effect on the average PSNR achieved by NeuRBF.
+
+## Effect of hidden dimensions
+The MLP network as described in the original paper has 2 hidden layers and 1 output layer, with 64 neurons in the hidden layers, described by the . We provide the results for changing the number of neurons in the hidden layers to 16 and 32. Testing the outputs corresponding to having a lesser number of neurons in the hidden layers of the MLP helps us evaluate if we can potentially use a lesser number of parameters in our network while maintaining a similar level of performance. The idea is that it can help us save computational time. This is exactly what we observe, and the results are provided below. We can see that reducing the number of neurons to 32 reduces the computational time by ~10%, and actually gives us a slightly better psnr than the base. Reducing the number of neurons to 16 reduces the computational time by nearly a further 5 percent, with only a slight drop in the psnr value. The reduction in training time is expected, given a reduction in the number of trainable paramaters. We were surprised by getting nearly the same psnr value with a succesive halving of the number of neurons in the hidden layers, having expected a more noticeable drop. This opens possibilities of adding more complexity in the overall structure where the performance increase at the cost of increase in computational time is more reasonable.
+
+| Method                        | Our Average PSNR |    Training time   |
+| ----------------------------- | ---------------- | ------------------ |
+| Base (hidden_dim=64)          |   41.44          |   160.53s          |
+| hidden_dim = 16               |   40.99          |   139.86s          |
+| hidden_dim = 32               |   41.47          |   145.50s          |
+
+
+## Presence of grid-based RBFs
+The original paper implements a combination of grid-based rbfs and adaptive rbfs. We study the results of dropping the grid-based rbfs from the implementation in hope of observing the same effect as with the number of neurons in the hidden layers of the MLP. As far as the computational time is observed, we do observe a drop of nearly 5% compared to using a combination of both grid based and adaptive rbfs. Unfortunately, this also occurs with a drop in psnr of nearly 1.7. The results are shown below. This leads us to believe that for optimal performance, the combination of both grid-based and adaptive rbfs is necessary.
+
+| Method                        | Our Average PSNR |    Training time   |
+| ----------------------------- | ---------------- | ------------------ |
+| Base (hidden_dim=64)          |   41.44          |   160.53s          |
+| num_levels=0                  |   39.77          |   153.85s          |
+
 
 ## Sinusoidal composition
 The paper extends the radial basis function by adding a multi-frequency sinusoidal composition (MSC) on the the radial basis with different frequencies. The formulation is as follows:
@@ -123,6 +144,10 @@ For this analysis the following images were selected from the dataset referred t
 
 notes on the results:
 - 
+
+## Conclusion and final remarks
+We have been reasonably able to to reproduce the results provided in the original paper, whilse successfully providing some new insight into the effect of ablating certain parameters. In conclusion, we would like to remark that while the code was not hard to reimplement, it was a little hard to understand what was going on in certain parts of the code, and maybe more comments would be helpful. Also, in the paper itself, at certain points, more detail could have been provided, and in the form the paper has actually been written, it assumes a great amount of prior knowledge.
+
 
 ## References
 
