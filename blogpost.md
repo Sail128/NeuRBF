@@ -102,13 +102,7 @@ The paper however only uses one RBF throughout the paper as an example of this m
 $$\varphi(\mathbf{x},\mathbf{c}_{i},\Sigma_{i})={\frac{1}{1+(\mathbf{x}-\mathbf{c}_{i})^{T}\Sigma_{i}^{-1}(\mathbf{x}-\mathbf{c}_{i})}}$$
 Besides the inverse multiquadratic many more Radial Basis Functions exist and may have varying performance depending on the exact case. This is also acknowledged within the paper but not expanded upon.
 
-This led to two questions. First does the choice of RBF significantly matter. Second, did there example choice of RBF significantly influence there results.
-
-<!-- We were therefor interested in expanding upon this to see if this claim has merit or if there choice of RBF could have significantly influenced there results. -->
-
-
-<!-- In the paper only one RBF (Radial Basis Function) is tested. It is however acknowledged that this method extends to any generic RBF and that certain types of images can benefit from different RBFs. In order to investigate this We chose several different RBFs to try out on a random subset of images from our dataset. -->
-
+This led to two questions. First does the choice of RBF significantly matter for the result. Second, did their example choice of RBF significantly influence their results.
 
 ### setup of experiment
 
@@ -132,18 +126,31 @@ The 3d plots of each RBF function with a identity matrix as shape parameter.
 
 #### Images
 
-For this analysis the following images were selected from the dataset referred to earlier.
+For this analysis the following images were selected from the dataset referred to earlier. 
+These images were selected due to their variety. Some have high frequencie detail, some have large solid backgroudns, and some have parts of the image which are out of focus. While this is not an exhaustive set, we expect it to proide enough variety to be able to make a qualatative assesment.
 
 ![image selected form the dataset](blogpost_assets/rbf_plotted_images.png)
 
 #### Method of testing
+The images are encoded using the selected RBFs as basis functions. This is then used to generate a new image. Between the original and the result an error map is calculated as well as a PSNR. Each NeuRBF was trained using the same settings as their ablation studies, with 3500 epochs. All other settings were left at default. 
 
 ### results & discussion
 
 ![Radial Basis Functions error maps](blogpost_assets/rbf_error_maps.png)
 
 notes on the results:
-- 
+- visually the errormaps seem to indicate that the choice of RBF makes a large difference
+- For each image a different RBF produces the best result
+- For some images the resulting PSNR is fairly close, within 3dB. While for, for example img_44, the resulting PSNR differs by almost 6dB.
+- There chosen method, inverse qudratic (ivq_a), is only the best for one image from this set, but seems to perform reasonably well for most of them. 
+
+First does the choice of RBF significantly matter for the result. Second, did their example choice of RBF significantly influence their results.
+
+To come to the answers to the questions we were intersted in. First, does the choice of RBF significantly matter for the result. Yes, it definitly seems to matter what RBF is used when the training epochs is limited. It maybe the case that with more epoch they all settle to an equal PSNR, but this was not investigated here. Additionally the content of the image also plays a role in how an RBF performs. With additional data it may be possible to infere from image characteristics what RFS would perfrom well.
+The second question, did their choice of RBF onfluence their results. Looking at this limted sample set we don't think their results were negatively impacted by the choice of RBF. While the inverse quadratic doesn't perform the best for each image in the sample size tested it does seem to perform fairly consistently well across the sample dataset, compared to the other RBFs. 
+
+While this analysis wasn't exhaustive, it does show the potential of the NeuRBF method when using different RBFs. 
+
 
 ## Conclusion and final remarks
 We have been reasonably able to to reproduce the results provided in the original paper, whilse successfully providing some new insight into the effect of ablating certain parameters. In conclusion, we would like to remark that while the code was not hard to reimplement, it was a little hard to understand what was going on in certain parts of the code, and maybe more comments would be helpful. Also, in the paper itself, at certain points, more detail could have been provided, and in the form the paper has actually been written, it assumes a great amount of prior knowledge.
