@@ -53,23 +53,21 @@ We wanted to investigate the effect of this normalization, because the authors m
 Based on the ablation study above, we can conclude that removing the normalization has little to no effect on the average PSNR achieved by NeuRBF.
 
 ## Effect of hidden dimensions
-The MLP network as described in the original paper has 2 hidden layers and 1 output layer, with 64 neurons in the hidden layers, described by the . We provide the results for changing the number of neurons in the hidden layers to 16 and 32. Testing the outputs corresponding to having a lesser number of neurons in the hidden layers of the MLP helps us evaluate if we can potentially use a lesser number of parameters in our network while maintaining a similar level of performance. The idea is that it can help us save computational time. This is exactly what we observe, and the results are provided below. We can see that reducing the number of neurons to 32 reduces the computational time by ~10%, and actually gives us a slightly better psnr than the base. Reducing the number of neurons to 16 reduces the computational time by nearly a further 5 percent, with only a slight drop in the psnr value. The reduction in training time is expected, given a reduction in the number of trainable paramaters. We were surprised by getting nearly the same psnr value with a succesive halving of the number of neurons in the hidden layers, having expected a more noticeable drop. This opens possibilities of adding more complexity in the overall structure where the performance increase at the cost of increase in computational time is more reasonable.
+The MLP network as described in the original paper has 2 hidden layers and 1 output layer, with 64 neurons in each hidden layer. We provide the results for changing the number of neurons in each hidden layer to 16 and 32. Testing the outputs corresponding to having a lesser number of neurons in each hidden layer of the MLP helps us evaluate if we can potentially use a lesser number of parameters in our network while maintaining a similar level of performance. The idea is that it can help us save computational time. This is exactly what we observe, and the results are provided below. We can see that reducing the number of neurons to 32 reduces the computational time by ~10%, and actually gives us a slightly better PSNR than the base. Reducing the number of neurons to 16 reduces the computational time by nearly a further 5 percent, with only a slight drop in the PSNR value. The reduction in training time is expected, given a reduction in the number of trainable paramaters. We were surprised by getting nearly the same PSNR value with a succesive halving of the number of neurons in the hidden layers, having expected a more noticeable drop. This opens possibilities of adding more complexity in the overall structure elsewhere while saving on computational time by reducing the number of neurons in each hidden layer.
 
-| Method                        | Our Average PSNR |    Training time   |
-| ----------------------------- | ---------------- | ------------------ |
-| Base (hidden_dim=64)          |   41.44          |   160.53s          |
-| hidden_dim = 16               |   40.99          |   139.86s          |
-| hidden_dim = 32               |   41.47          |   145.50s          |
-
+| Method                        | Our Average PSNR | Average Training time   |
+| ----------------------------- | ---------------- | ----------------------- |
+| Base (64 hidden dimensions)   |   41.44          |   160.53s               |
+| 16 hidden dimensions          |   40.99          |   139.86s               |
+| 32 hidden dimensions          |   41.47          |   145.50s               |
 
 ## Presence of grid-based RBFs
-The original paper implements a combination of grid-based rbfs and adaptive rbfs. We study the results of dropping the grid-based rbfs from the implementation in hope of observing the same effect as with the number of neurons in the hidden layers of the MLP. As far as the computational time is observed, we do observe a drop of nearly 5% compared to using a combination of both grid based and adaptive rbfs. Unfortunately, this also occurs with a drop in psnr of nearly 1.7. The results are shown below. This leads us to believe that for optimal performance, the combination of both grid-based and adaptive rbfs is necessary.
+The original paper implements a combination of grid-based RBFs and adaptive RBFs. We study the results of dropping the grid-based RBFs from the implementation in hope of observing the same effect as with the number of neurons in the hidden layers of the MLP. As far as the computational time is observed, we do observe a drop of nearly 5% compared to using a combination of both grid based and adaptive RBFs. Unfortunately, this also occurs with a drop in PSNR of nearly 1.7. The results are shown below. This leads us to believe that for optimal performance, the combination of both grid-based and adaptive RBFs is necessary.
 
-| Method                        | Our Average PSNR |    Training time   |
-| ----------------------------- | ---------------- | ------------------ |
-| Base (hidden_dim=64)          |   41.44          |   160.53s          |
-| num_levels=0                  |   39.77          |   153.85s          |
-
+| Method                        | Our Average PSNR | Average Training time   |
+| ----------------------------- | ---------------- | ----------------------- |
+| Base (64 hidden dimensions)   |   41.44          |   160.53s               |
+| no grid-based RBFs            |   39.77          |   153.85s               |
 
 ## Sinusoidal composition
 The paper extends the radial basis function by adding a multi-frequency sinusoidal composition (MSC) on the the radial basis with different frequencies. The formulation is as follows:
@@ -82,7 +80,7 @@ The different frequencies are determined by setting a maximum and minimum for m.
 
 The sinusoidal composition method is also applied to the output of the first fully connected layer in the MLP. The output is then used as the input for the next layer. 
 
-They claim that using these sinusoidal compositions improve the performance. They also documented the results they got with and without these additional compositions and we want to check these results by doing the same ablation study and compare our results but with a different dataset. 
+They claim that using these sinusoidal compositions improves the performance. They also documented the results they got with and without these additional compositions and we want to check these results by doing the same ablation study and compare our results but with a different dataset. 
 
 Our results can be seen in the table below. On the left are our results on our own dataset of 50 high resolution images. On the right are the results from the ablation study from the paper itself. They used a dataset of 100 images.
 | Method                        | Our Average PSNR | Their Average PSNR |
@@ -98,7 +96,7 @@ We are not exaclty sure why these differ so much, but we have some speculations 
 
 ## Effect of the RBF Function on image representation performance
 
-The paper we are examining here is about the use of radial basis functions in for learning feature representation of image and higher higher dimensional data such as SDFs and radiance fields. They recognise that the gridbased weighted linear interpolation method of Local Neural Fields can be viewed as a special case os a radial basis function. From this then follow the main contribution of this paper which is to present a framework to which uses adaptive RBFs to find a representation, called Neural Radial Basis Fields. Adaptive RBFs are not locked to a grid as they have additional position and shape parameters.
+The paper we are examining here is about the use of radial basis functions for learning feature representation of images and higher dimensional data such as SDFs and radiance fields. They recognise that the gridbased weighted linear interpolation method of Local Neural Fields can be viewed as a special case os a radial basis function. From this then follow the main contribution of this paper which is to present a framework to which uses adaptive RBFs to find a representation, called Neural Radial Basis Fields. Adaptive RBFs are not locked to a grid as they have additional position and shape parameters.
 
 The paper however only uses one RBF throughout the paper as an example of this method, the inverse multi quadratic function.
 
@@ -161,8 +159,7 @@ While this analysis wasn't exhaustive, it does show the potential of the NeuRBF 
 
 
 ## Conclusion and final remarks
-We have been reasonably able to to reproduce the results provided in the original paper, whilse successfully providing some new insight into the effect of ablating certain parameters. In conclusion, we would like to remark that while the code was not hard to reimplement, it was a little hard to understand what was going on in certain parts of the code, and maybe more comments would be helpful. Also, in the paper itself, at certain points, more detail could have been provided, and in the form the paper has actually been written, it assumes a great amount of prior knowledge.
-
+We have been reasonably able to reproduce the results provided in the original paper, while successfully providing some new insight into the effect of ablating certain parameters. In conclusion, we would like to remark that it was hard to understand what was going on in the code, and more comments and a better structured code would be helpful. Also, in the paper itself, at certain points, more detail could have been provided, and in the form the paper has actually been written, it assumes a great amount of prior knowledge.
 
 ## References
 
