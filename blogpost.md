@@ -19,7 +19,7 @@ Neural fields make use of Neural Networks to form neural representations, which 
 
 ## Dataset
 
-subset of LIU-4k-V2 [[2]](#2)
+For our ablation study we used a different dataset of images as opposed to the paper, the dataset is subset of LIU-4k-V2 [[2]](#2). We wanted to verify if NeuRBF would provide similar results on a different dataset. Furthermore, our dataset only contains 50 images as opposed to the 100 images used in the authors' ablation study. The reduction of the amount images saved us a lot of our time as each ablation study that we conducted took around 3 hours. The ablation study and reproduction results were executed in Kaggle.
 
 ## 2D Image Fitting
 We evaluated the effectiveness of NeuRBF on 2D image fitting by reproducing the error map of the two fitted images shown in Figure 4 of [[1]](#1). The error map is defined as the error between the original image and the reconstructed image by NeuRBF, which is calculated as the mean absolute error across the color channels for each pixel (range of pixel value is [0, 1]). The left column of the figure below shows the paper’s results of the image fitting and the right column displays the results of our implementation. Below each error map the following is reported: the number of training parameters (in M/Millions) used by NeuRBF and the Peak Signal-to-Noise Ratio (PSNR) of the reproduced figure (in dB). The formula for the PSNR [[3]](#3) is given by the equation below:
