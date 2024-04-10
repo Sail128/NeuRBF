@@ -115,11 +115,11 @@ To investigate the questions. We decided to test five different RBFs besides the
 In total six RBFs were tested, these and the reasoning being:
 
 - Inverse quadratic: This is the example function they use. The basic formula for this function is: $\frac{1}{1+(x-kc)^2*ks}$
-- Gaussian: A very well understood RBF from literature and often implemented. the basic formula for this functionis: 
-- Inverse multiquadratic: This and the non inverse variant too are also often used in literature. 
-- multiquadratic: Also an often used RBF
-- Non linear: This function is a linear fall-off about a center point up to a distance away from it which is dependent on the weight. When used in a regular grid without the adaptive parameters this function is the same as a Local Neural Field. Making it interesting to see how this performs against more smooth RBFs
-- Exponential Sine: this function is a periodic function which may capture a periodic signal better and could therefore perform better in certain cases.
+- Gaussian: A very well understood RBF from literature and often implemented. The basic formula for this function is: $\phi(r) = e^{-\frac{(x-kc)^2 * ks}{2}}$
+- Inverse multiquadratic: This and the non inverse variant too are also often used in literature. With function: $\frac{1}{1+(x-kc)^2*ks}$
+- multiquadratic: Also an often used RBF. With $\sqrt{1+(x-kc)^2*ks}$
+- Non linear: This function is a linear fall-off about a center point up to a distance away from it which is dependent on the weight. When used in a regular grid without the adaptive parameters this function is the same as a Local Neural Field. Making it interesting to see how this performs against more smooth RBFs.
+- Exponential Sine: this function is a periodic function which may capture a periodic signal better and could therefore perform better in certain cases. With function: $e^{-\sin{\sqrt{(x-k_c)^2*k_s}}}$
 
 In all cases the adpative variants with anisotropic shape parameters were used. This was done to remain consistent with the results presented in the paper.
 
@@ -146,7 +146,7 @@ notes on the results:
 - For some images the resulting PSNR is fairly close, within 3dB. While for, for example img_44, the resulting PSNR differs by almost 6dB.
 - There chosen method, inverse qudratic (ivq_a), is only the best for one image from this set, but seems to perform reasonably well for most of them. 
 
-First does the choice of RBF significantly matter for the result. Second, did their example choice of RBF significantly influence their results.
+<!-- First does the choice of RBF significantly matter for the result. Second, did their example choice of RBF significantly influence their results. -->
 
 To come to the answers to the questions we were intersted in. First, does the choice of RBF significantly matter for the result. Yes, it definitly seems to matter what RBF is used when the training epochs is limited. It maybe the case that with more epoch they all settle to an equal PSNR, but this was not investigated here. Additionally the content of the image also plays a role in how an RBF performs. With additional data it may be possible to infere from image characteristics what RFS would perfrom well.
 The second question, did their choice of RBF onfluence their results. Looking at this limted sample set we don't think their results were negatively impacted by the choice of RBF. While the inverse quadratic doesn't perform the best for each image in the sample size tested it does seem to perform fairly consistently well across the sample dataset, compared to the other RBFs. 
