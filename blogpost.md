@@ -47,7 +47,7 @@ We wanted to investigate the effect of this normalization, because the authors m
 
 | Method                        | Average PSNR | 
 | ----------------------------- | ---------------- | 
-| With Normalization                      |   41.45          | 
+| Base (with Normalization)                      |   41.45          | 
 | No Normalization    |   41.31         | 
 
 Based on the ablation study above, we can conclude that removing the normalization has little to no effect on the average PSNR achieved by NeuRBF.
@@ -57,7 +57,7 @@ The MLP network as described in the original paper has 2 hidden layers and 1 out
 
 | Method                        | Our Average PSNR | Our Average Training time   |
 | ----------------------------- | ---------------- | --------------------------- |
-| Base (64 hidden dimensions)   |   41.44          |   160.53s                   |
+| Base (64 hidden dimensions)   |   41.45          |   160.53s                   |
 | 16 hidden dimensions          |   40.99          |   139.86s                   |
 | 32 hidden dimensions          |   41.47          |   145.50s                   |
 
@@ -66,7 +66,7 @@ The original paper implements a combination of grid-based RBFs and adaptive RBFs
 
 | Method                        | Our Average PSNR | Our Average Training time   |
 | ----------------------------- | ---------------- | --------------------------- |
-| Base (64 hidden dimensions)   |   41.44          |   160.53s                   |
+| Base (with grid-based)   |   41.45          |   160.53s                   |
 | No grid-based RBFs            |   39.77          |   153.85s                   |
 
 ## Sinusoidal composition
