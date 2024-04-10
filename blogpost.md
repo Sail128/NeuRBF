@@ -9,6 +9,8 @@ This blog post documents the results of the reproduction and ablation study of G
 | Jimmie Kwok        | 5410908    |    2D Image Fitting, Results Processing                    |
 | Kunal Kaushik      | 6050549    |    Hidden Dimensions, Presence of grid-based RBFs                     |
 
+The notebook used can be found attached to this repo as well as on [kaggle here](https://www.kaggle.com/sail128/neurbf-reproducability-study)
+
 ## Introduction
 
 Neural fields make use of Neural Networks to form neural representations, which map continuous input values to outputs for the purpose of various tasks such as representing 2D images and 3D reconstruction. Neural fields evolved from using global neural features into local neural fields, which utilise grid-like structures to organise local neural features and interpolate linearly to sum up the local features. However, there still remain issues in achieving desired accuracy and compactness with grid-like structures, due to their unadaptive nature to target signals and inability to completely utilise non-uniformity and sparsity for many tasks. The purpose of the authors in this work [[1]](#1) is to enhance the representation abilities of neural fields. They do so by introducing spatial adaptivity and frequency extension in the interpolation of basis functions. Grid-based linear interpolation is in a sense a type of Radial Basis Function (RBF). RBFs can reduce the number of parameters required for representations, and hence the authors proposed NeuRBF, which combines adaptive and grid-based RBFs. The RBFs are extended channel-wise and utilise multi-frequency sinusoidal composition, increasing representation capabilities by allowing the RBFs to encode a bigger range of frequencies without the cost of needing more parameters. A weighted scheme for K-Means is used for kernel parameter initialisation to help RBFs adapt to different target signals, and for Neural Radiance Field (NeRF) reconstruction, a distillation based approach is also made use of. The authors claim to have achieved state of the art accuracy on 2D image fitting, 3D signed distance field reconstruction, and NeRF reconstruction. For the purposes of our reproducibility studies, we focus only on 2D image fitting. We will reproduce the rightmost column of image 4 from the original paper, and vary the value of various parameters in the implementation of NeuRBF to study the effect on the results, and also compare to some ablation results for image fitting that the authors have provided in the original paper as well.
@@ -104,7 +106,7 @@ The paper however only uses one RBF throughout the paper as an example of this m
 \varphi(\mathbf{x},\mathbf{c}_{i},\Sigma_{i})=\frac{1}{1+(\mathbf{x}-\mathbf{c}_{i})^{T}\Sigma_{i}^{-1}(\mathbf{x}-\mathbf{c}_{i})}
 $$ -->
 
-![image of equation](https://latex.codecogs.com/svg.image?\large&space;\varphi(\mathbf{x},\mathbf{c}_{i},\Sigma_{i})=\frac{1}{1&plus;(\mathbf{x}-\mathbf{c}_{i})^{T}\Sigma_{i}^{-1}(\mathbf{x}-\mathbf{c}_{i})})
+![image of equation](https://latex.codecogs.com/svg.image?\large&space;\bg{white}\varphi(\mathbf{x},\mathbf{c}_{i},\Sigma_{i})=\frac{1}{1&plus;(\mathbf{x}-\mathbf{c}_{i})^{T}\Sigma_{i}^{-1}(\mathbf{x}-\mathbf{c}_{i})}S)
 
 Besides the inverse multiquadratic many more Radial Basis Functions exist and may have varying performance depending on the exact case. This is also acknowledged within the paper but not expanded upon.
 
