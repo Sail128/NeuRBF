@@ -99,9 +99,9 @@ We are not exaclty sure why these differ so much, but we have some speculations 
 The paper we are examining here is about the use of radial basis functions in for learning feature representation of image and higher higher dimensional data such as SDFs and radiance fields. They recognise that the gridbased weighted linear interpolation method of Local Neural Fields can be viewed as a special case os a radial basis function. From this then follow the main contribution of this paper which is to present a framework to which uses adaptive RBFs to find a representation, called Neural Radial Basis Fields. Adaptive RBFs are not locked to a grid as they have additional position and shape parameters.
 
 The paper however only uses one RBF throughout the paper as an example of this method, the inverse multi quadratic function.
-$$
+$
 \varphi(\mathbf{x},\mathbf{c}_{i},\Sigma_{i})={\frac{1}{1+(\mathbf{x}-\mathbf{c}_{i})^{T}\Sigma_{i}^{-1}(\mathbf{x}-\mathbf{c}_{i})}}
-$$
+$   
 Besides the inverse multiquadratic many more Radial Basis Functions exist and may have varying performance depending on the exact case. This is also acknowledged within the paper but not expanded upon.
 
 This led to two questions. First does the choice of RBF significantly matter for the result. Second, did their example choice of RBF significantly influence their results.
