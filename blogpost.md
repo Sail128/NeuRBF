@@ -55,19 +55,19 @@ Based on the ablation study above, we can conclude that removing the normalizati
 ## Effect of hidden dimensions
 The MLP network as described in the original paper has 2 hidden layers and 1 output layer, with 64 neurons in each hidden layer. We provide the results for changing the number of neurons in each hidden layer to 16 and 32. Testing the outputs corresponding to having a lesser number of neurons in each hidden layer of the MLP helps us evaluate if we can potentially use a lesser number of parameters in our network while maintaining a similar level of performance. The idea is that it can help us save computational time. This is exactly what we observe, and the results are provided below. We can see that reducing the number of neurons to 32 reduces the computational time by ~10%, and actually gives us a slightly better PSNR than the base. Reducing the number of neurons to 16 reduces the computational time by nearly a further 5 percent, with only a slight drop in the PSNR value. The reduction in training time is expected, given a reduction in the number of trainable paramaters. We were surprised by getting nearly the same PSNR value with a succesive halving of the number of neurons in the hidden layers, having expected a more noticeable drop. This opens possibilities of adding more complexity in the overall structure elsewhere while saving on computational time by reducing the number of neurons in each hidden layer.
 
-| Method                        | Our Average PSNR | Average Training time   |
-| ----------------------------- | ---------------- | ----------------------- |
-| Base (64 hidden dimensions)   |   41.44          |   160.53s               |
-| 16 hidden dimensions          |   40.99          |   139.86s               |
-| 32 hidden dimensions          |   41.47          |   145.50s               |
+| Method                        | Our Average PSNR | Our Average Training time   |
+| ----------------------------- | ---------------- | --------------------------- |
+| Base (64 hidden dimensions)   |   41.44          |   160.53s                   |
+| 16 hidden dimensions          |   40.99          |   139.86s                   |
+| 32 hidden dimensions          |   41.47          |   145.50s                   |
 
 ## Presence of grid-based RBFs
 The original paper implements a combination of grid-based RBFs and adaptive RBFs. We study the results of dropping the grid-based RBFs from the implementation in hope of observing the same effect as with the number of neurons in the hidden layers of the MLP. As far as the computational time is observed, we do observe a drop of nearly 5% compared to using a combination of both grid based and adaptive RBFs. Unfortunately, this also occurs with a drop in PSNR of nearly 1.7. The results are shown below. This leads us to believe that for optimal performance, the combination of both grid-based and adaptive RBFs is necessary.
 
-| Method                        | Our Average PSNR | Average Training time   |
-| ----------------------------- | ---------------- | ----------------------- |
-| Base (64 hidden dimensions)   |   41.44          |   160.53s               |
-| no grid-based RBFs            |   39.77          |   153.85s               |
+| Method                        | Our Average PSNR | Our Average Training time   |
+| ----------------------------- | ---------------- | --------------------------- |
+| Base (64 hidden dimensions)   |   41.44          |   160.53s                   |
+| No grid-based RBFs            |   39.77          |   153.85s                   |
 
 ## Sinusoidal composition
 The paper extends the radial basis function by adding a multi-frequency sinusoidal composition (MSC) on the the radial basis with different frequencies. The formulation is as follows:
