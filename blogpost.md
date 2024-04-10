@@ -99,7 +99,9 @@ We are not exaclty sure why these differ so much, but we have some speculations 
 The paper we are examining here is about the use of radial basis functions in for learning feature representation of image and higher higher dimensional data such as SDFs and radiance fields. They recognise that the gridbased weighted linear interpolation method of Local Neural Fields can be viewed as a special case os a radial basis function. From this then follow the main contribution of this paper which is to present a framework to which uses adaptive RBFs to find a representation, called Neural Radial Basis Fields. Adaptive RBFs are not locked to a grid as they have additional position and shape parameters.
 
 The paper however only uses one RBF throughout the paper as an example of this method, the inverse multi quadratic function.
-$$\varphi(\mathbf{x},\mathbf{c}_{i},\Sigma_{i})={\frac{1}{1+(\mathbf{x}-\mathbf{c}_{i})^{T}\Sigma_{i}^{-1}(\mathbf{x}-\mathbf{c}_{i})}}$$
+$$
+\varphi(\mathbf{x},\mathbf{c}_{i},\Sigma_{i})={\frac{1}{1+(\mathbf{x}-\mathbf{c}_{i})^{T}\Sigma_{i}^{-1}(\mathbf{x}-\mathbf{c}_{i})}}
+$$
 Besides the inverse multiquadratic many more Radial Basis Functions exist and may have varying performance depending on the exact case. This is also acknowledged within the paper but not expanded upon.
 
 This led to two questions. First does the choice of RBF significantly matter for the result. Second, did their example choice of RBF significantly influence their results.
@@ -112,10 +114,10 @@ To investigate the questions. We decided to test five different RBFs besides the
 
 In total six RBFs were tested, these and the reasoning being:
 
-- Inverse quadratic: This is the example function they use. The basic formula for this functionis: $\frac{1}{1+(x-kc)^2*ks}$
+- Inverse quadratic: This is the example function they use. The basic formula for this function is: $\frac{1}{1+(x-kc)^2*ks}$
 - Gaussian: A very well understood RBF from literature and often implemented. the basic formula for this functionis: 
 - Inverse multiquadratic: This and the non inverse variant too are also often used in literature. 
-- multiquadratic:
+- multiquadratic: Also an often used RBF
 - Non linear: This function is a linear fall-off about a center point up to a distance away from it which is dependent on the weight. When used in a regular grid without the adaptive parameters this function is the same as a Local Neural Field. Making it interesting to see how this performs against more smooth RBFs
 - Exponential Sine: this function is a periodic function which may capture a periodic signal better and could therefore perform better in certain cases.
 
