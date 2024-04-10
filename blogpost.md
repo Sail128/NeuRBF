@@ -100,7 +100,11 @@ The paper we are examining here is about the use of radial basis functions in fo
 
 The paper however only uses one RBF throughout the paper as an example of this method, the inverse multi quadratic function.
 
-$$\varphi(\mathbf{x},\mathbf{c}_{i},\Sigma_{i})=\frac{1}{1+(\mathbf{x}-\mathbf{c}_{i})^{T}\Sigma_{i}^{-1}(\mathbf{x}-\mathbf{c}_{i})}$$
+<!-- $$
+\varphi(\mathbf{x},\mathbf{c}_{i},\Sigma_{i})=\frac{1}{1+(\mathbf{x}-\mathbf{c}_{i})^{T}\Sigma_{i}^{-1}(\mathbf{x}-\mathbf{c}_{i})}
+$$ -->
+
+![image of equation](https://latex.codecogs.com/svg.image?\large&space;\varphi(\mathbf{x},\mathbf{c}_{i},\Sigma_{i})=\frac{1}{1&plus;(\mathbf{x}-\mathbf{c}_{i})^{T}\Sigma_{i}^{-1}(\mathbf{x}-\mathbf{c}_{i})})
 
 Besides the inverse multiquadratic many more Radial Basis Functions exist and may have varying performance depending on the exact case. This is also acknowledged within the paper but not expanded upon.
 
