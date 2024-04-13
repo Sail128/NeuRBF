@@ -9,7 +9,7 @@ This blog post documents the results of the reproduction and ablation study of G
 | Jimmie Kwok        | 5410908    |    2D Image Fitting, Results Processing                    |
 | Kunal Kaushik      | 6050549    |    Hidden Dimensions, Presence of grid-based RBFs                     |
 
-The notebook used can be found attached to this repo as well as on [kaggle here](https://www.kaggle.com/sail128/neurbf-reproducability-study)
+The notebook used can be found attached to this repo as well as on [Kaggle here](https://www.kaggle.com/sail128/neurbf-reproducability-study)
 
 ## Introduction
 
@@ -45,7 +45,7 @@ where $\varphi(x, c_i, \Sigma_i)$ corresponds to the used RBF function and $U(x)
 
 We wanted to investigate the effect of this normalization, because the authors mentioned that they deemed it as an optional step without providing any further explanation. The effect is investigated by conducting an ablation study on normalization, where the results of this ablation is shown by the table below:
 
-| Method                        | Average PSNR | 
+| Method                        | Our Average PSNR | 
 | ----------------------------- | ---------------- | 
 | Base (with Normalization)                      |   41.45          | 
 | No Normalization    |   41.31         | 
@@ -74,7 +74,7 @@ The paper extends the radial basis function by adding a multi-frequency sinusoid
 
 $\varphi (\mathbf{x},\mathbf{c}_i,\Sigma _i)=sin(\widetilde{\varphi} (\mathbf{x},\mathbf{c}_i,\Sigma _i)\cdot \mathbf{m}+\mathbf{b})$
 
-The different frequencies are determined by setting a maximum and minimum for m. The rest of the elements are obtained by log-linearly dividing the range between the maximum and minimum. Comparing this to the fourier basis or gabor basis seen in the figure it is now possible to have a basis with non-linear paterns.
+The different frequencies are determined by setting a maximum and minimum for m. The rest of the elements are obtained by log-linearly dividing the range between the maximum and minimum. Comparing this to the Fourier basis or Gabor basis as seen in the figure below it is now possible to have a basis with non-linear paterns.
 
 ![Radial basis plot](radial_basis_plot.png)
 
@@ -90,13 +90,13 @@ Our results can be seen in the table below. On the left are our results on our o
 | MSC only on RBF function      |   42.38          | 48.46              |
 | No MSC                        |   39.96          | 43.81              |
 
-Firstly, the PSNR values between our ablation study and theirs is very different. They report a lot higher values in general. Moreover, our results show that the MSC on the RBF has a bigger influence on the results then MSC on the feature vector whilest they report about the same amount of influence of the MSC on the RBF and the feature vector on the results.
+Firstly, the PSNR values between our ablation study and theirs is very different. They report a lot higher values in general. Moreover, our results show that the MSC on the RBF has a bigger influence on the results then MSC on the feature vector whilst they report about the same amount of influence of the MSC on the RBF and the feature vector on the results.
 
-We are not exaclty sure why these differ so much, but we have some speculations that might explain these differences. The difference in general results might be because of the difference in the dataset but that would mean that it is not a very generilizable method. Furthermore, the paper states that using different RBF kernels can give better results in specific image cases. So this might also explain the possible difference between the MSC on the RBF function and the MSC on the feature vector, as it is possible that the MSC on the RBF has more influence on our dataset then theirs. We further explore the different kernels later in this blog post.
+We are not exaclty sure why these differ so much, but we have some speculations that might explain these differences. The difference in general results might be because of the difference in the dataset but that would mean that it is not a very generalizable method. Furthermore, the paper states that using different RBF kernels can give better results in specific image cases. So this might also explain the possible difference between the MSC on the RBF function and the MSC on the feature vector, as it is possible that the MSC on the RBF has more influence on our dataset then theirs. We further explore the different kernels later in this blog post.
 
 ## Effect of the RBF Function on image representation performance
 
-The paper we are examining here is about the use of radial basis functions for learning feature representation of images and higher dimensional data such as SDFs and radiance fields. They recognise that the gridbased weighted linear interpolation method of Local Neural Fields can be viewed as a special case os a radial basis function. From this then follow the main contribution of this paper which is to present a framework to which uses adaptive RBFs to find a representation, called Neural Radial Basis Fields. Adaptive RBFs are not locked to a grid as they have additional position and shape parameters.
+The paper we are examining here is about the use of radial basis functions for learning feature representation of images and higher dimensional data such as SDFs and radiance fields. They recognise that the gridbased weighted linear interpolation method of Local Neural Fields can be viewed as a special case of a radial basis function. From this then follow the main contribution of this paper which is to present a framework to which uses adaptive RBFs to find a representation, called Neural Radial Basis Fields. Adaptive RBFs are not locked to a grid as they have additional position and shape parameters.
 
 The paper however only uses one RBF throughout the paper as an example of this method, the inverse multi quadratic function.
 
@@ -110,7 +110,7 @@ Besides the inverse multiquadratic many more Radial Basis Functions exist and ma
 
 This led to two questions. First does the choice of RBF significantly matter for the result. Second, did their example choice of RBF significantly influence their results.
 
-### setup of experiment
+### Setup of experiment
 
 To investigate the questions. We decided to test five different RBFs besides the RBF used in the paper on six images we selected to be very different, based on amount of detail, background, subject, lighting conditions. We recognize this is only a small sample size, but this was chosen to stay within time and compute constraints.
 
@@ -121,41 +121,41 @@ In total six RBFs were tested, these and the reasoning being:
 - Inverse quadratic: This is the example function they use. The basic formula for this function is: $\frac{1}{1+(x-kc)^2*ks}$
 - Gaussian: A very well understood RBF from literature and often implemented. The basic formula for this function is: $\phi(r) = e^{-\frac{(x-kc)^2 * ks}{2}}$
 - Inverse multiquadratic: This and the non inverse variant too are also often used in literature. With function: $\frac{1}{1+(x-kc)^2*ks}$
-- multiquadratic: Also an often used RBF. With $\sqrt{1+(x-kc)^2*ks}$
+- Multiquadratic: Also an often used RBF. With $\sqrt{1+(x-kc)^2*ks}$
 - Non linear: This function is a linear fall-off about a center point up to a distance away from it which is dependent on the weight. When used in a regular grid without the adaptive parameters this function is the same as a Local Neural Field. Making it interesting to see how this performs against more smooth RBFs.
-- Exponential Sine: this function is a periodic function which may capture a periodic signal better and could therefore perform better in certain cases. With function: $e^{-\sin{\sqrt{(x-k_c)^2*k_s}}}$
+- Exponential Sine: This function is a periodic function which may capture a periodic signal better and could therefore perform better in certain cases. With function: $e^{-\sin{\sqrt{(x-k_c)^2*k_s}}}$
 
 In all cases the adpative variants with anisotropic shape parameters were used. This was done to remain consistent with the results presented in the paper.
 
-The 3d plots of each RBF function with a identity matrix as shape parameter.
+The 3d plots of each RBF function with an identity matrix as shape parameter.
 ![3d plotted rbfs](blogpost_assets/3d_plotted_rbfs.png)
 
 #### Images
 
 For this analysis the following images were selected from the dataset referred to earlier. 
-These images were selected due to their variety. Some have high frequencie detail, some have large solid backgroudns, and some have parts of the image which are out of focus. While this is not an exhaustive set, we expect it to proide enough variety to be able to make a qualatative assesment.
+These images were selected due to their variety. Some have high frequencies detail, some have large solid backgrounds, and some have parts of the image which are out of focus. While this is not an exhaustive set, we expect it to provide enough variety to be able to make a qualitative assessment.
 
 ![image selected form the dataset](blogpost_assets/rbf_plotted_images.png)
 
 #### Method of testing
 The images are encoded using the selected RBFs as basis functions. This is then used to generate a new image. Between the original and the result an error map is calculated as well as a PSNR. Each NeuRBF was trained using the same settings as their ablation studies, with 3500 epochs. All other settings were left at default. 
 
-### results & discussion
+### Results & discussion
 
 ![Radial Basis Functions error maps](blogpost_assets/rbf_error_maps.png)
 
-notes on the results:
-- visually the errormaps seem to indicate that the choice of RBF makes a large difference
-- For each image a different RBF produces the best result
+Notes on the results:
+- Visually the errormaps seem to indicate that the choice of RBF makes a large difference.
+- For each image a different RBF produces the best result.
 - For some images the resulting PSNR is fairly close, within 3dB. While for, for example img_44, the resulting PSNR differs by almost 6dB.
 - There chosen method, inverse qudratic (ivq_a), is only the best for one image from this set, but seems to perform reasonably well for most of them. 
 
 <!-- First does the choice of RBF significantly matter for the result. Second, did their example choice of RBF significantly influence their results. -->
 
-To come to the answers to the questions we were intersted in. First, does the choice of RBF significantly matter for the result. Yes, it definitly seems to matter what RBF is used when the training epochs is limited. It maybe the case that with more epoch they all settle to an equal PSNR, but this was not investigated here. Additionally the content of the image also plays a role in how an RBF performs. With additional data it may be possible to infere from image characteristics what RFS would perfrom well.
-The second question, did their choice of RBF onfluence their results. Looking at this limted sample set we don't think their results were negatively impacted by the choice of RBF. While the inverse quadratic doesn't perform the best for each image in the sample size tested it does seem to perform fairly consistently well across the sample dataset, compared to the other RBFs. 
+To come to the answers to the questions we were interested in. First, does the choice of RBF significantly matter for the result. Yes, it definitly seems to matter what RBF is used when the training epochs is limited. It maybe the case that with more epochs they all settle to an equal PSNR, but this was not investigated here. Additionally the content of the image also plays a role in how an RBF performs. With additional data it may be possible to infere from image characteristics what RFS would perform well.
+The second question, did their choice of RBF influence their results. Looking at this limited sample set we don't think their results were negatively impacted by the choice of RBF. While the inverse quadratic does not perform the best for each image in the tested sample size; it does seem to perform fairly consistently well across the sample dataset, compared to the other RBFs. 
 
-While this analysis wasn't exhaustive, it does show the potential of the NeuRBF method when using different RBFs. 
+While this analysis was not exhaustive, it does show the potential of the NeuRBF method when using different RBFs. 
 
 
 ## Conclusion and final remarks
